@@ -28,10 +28,8 @@ class IndonesianGrammarChecker {
             'baca', 'bawa', 'pukul', 'panggil', 'panggil', 'kirim', 'terima', 'tolak',
             'terima', 'tolak', 'tolong', 'tolong', 'tolong', 'tolong', 'tolong', 'tolong',
             'hitung', 'ukur', 'timbang', 'timbang', 'timbang', 'timbang', 'timbang',
-            'cari', 'temukan',
-            'buka', 'tutup', 'tutup', 'tutup', 'tutup', 'tutup', 'tutup', 'tutup',
-            'masuk', 'keluar', 'keluar', 'keluar', 'keluar', 'keluar', 'keluar',
-            'angkat', 'turun','putar', 'henti',
+            'cari', 'temukan','buka', 'tutup',
+            'masuk', 'keluar','angkat', 'turun','putar', 'henti',
             // Verba dengan akhiran -kan, -i
             'lakukan', 'buatkan', 'tuliskan', 'bacakan', 'berikan', 'tunjukkan',
             'ajarkan', 'bantukan', 'kirimkan', 'terimakan', 'tolakkan', 'hitungkan',
