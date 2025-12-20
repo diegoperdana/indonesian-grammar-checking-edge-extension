@@ -1,0 +1,41 @@
+INSTRUKSI MEMBUAT IKON EKSTENSI
+================================
+
+Untuk membuat ikon ekstensi, Anda memiliki beberapa opsi:
+
+OPSI 1: Menggunakan create-icons.html (Paling Mudah)
+-----------------------------------------------------
+1. Buka file create-icons.html di browser
+2. Klik tombol "Generate Icons" untuk melihat preview
+3. Klik tombol download untuk masing-masing ukuran (16x16, 48x48, 128x128)
+4. Simpan file dengan nama: icon16.png, icon48.png, icon128.png
+5. Pindahkan semua file ke folder icons/
+
+OPSI 2: Menggunakan Online Icon Generator
+------------------------------------------
+1. Kunjungi https://www.favicon-generator.org/ atau https://realfavicongenerator.net/
+2. Upload gambar atau buat ikon sederhana dengan teks "ID" atau simbol checkmark
+3. Download ikon dalam ukuran 16x16, 48x48, dan 128x128 pixels
+4. Simpan sebagai icon16.png, icon48.png, icon128.png di folder icons/
+
+OPSI 3: Menggunakan Paint atau Image Editor
+-------------------------------------------
+1. Buat gambar 128x128 pixels dengan background gradient (biru-ungu)
+2. Tambahkan simbol checkmark atau teks "ID" di tengah
+3. Simpan sebagai icon128.png
+4. Resize menjadi 48x48 dan simpan sebagai icon48.png
+5. Resize menjadi 16x16 dan simpan sebagai icon16.png
+6. Simpan semua file di folder icons/
+
+CATATAN PENTING:
+- Semua ikon harus dalam format PNG
+- Nama file harus tepat: icon16.png, icon48.png, icon128.png
+- Ukuran harus sesuai: 16x16, 48x48, 128x128 pixels
+- Tanpa ikon, ekstensi masih bisa berfungsi tetapi akan muncul peringatan di Edge
+
+UNTUK TESTING TANPA IKON:
+- Ekstensi masih bisa digunakan meskipun ikon belum dibuat
+- Edge akan menampilkan ikon default
+- Anda bisa membuat ikon nanti setelah testing selesai
+
+

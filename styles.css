@@ -1,0 +1,149 @@
+/* Styles for Indonesian Grammar Checker Extension */
+
+/* Highlight styles for grammar errors */
+.igc-highlight {
+    position: relative;
+    background-color: #fff3cd;
+    border-bottom: 2px solid #ffc107;
+    cursor: help;
+    padding: 2px 0;
+    transition: background-color 0.2s;
+}
+
+.igc-highlight:hover {
+    background-color: #ffe69c;
+}
+
+.igc-highlight.igc-error {
+    background-color: #f8d7da;
+    border-bottom-color: #dc3545;
+}
+
+.igc-highlight.igc-error:hover {
+    background-color: #f5c6cb;
+}
+
+.igc-highlight.igc-warning {
+    background-color: #fff3cd;
+    border-bottom-color: #ffc107;
+}
+
+.igc-highlight.igc-warning:hover {
+    background-color: #ffe69c;
+}
+
+/* Tooltip for error details */
+.igc-tooltip {
+    position: absolute;
+    background-color: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    z-index: 10000;
+    max-width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+    animation: fadeIn 0.2s;
+}
+
+.igc-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 20px;
+    border: 6px solid transparent;
+    border-top-color: #333;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Summary banner */
+.igc-summary {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    max-width: 300px;
+    animation: slideIn 0.3s;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.igc-summary-content {
+    padding: 15px;
+    font-size: 13px;
+    color: #333;
+    position: relative;
+}
+
+.igc-summary-content strong {
+    color: #667eea;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.igc-scan-complete {
+    color: #27ae60;
+    font-weight: 600;
+    display: block;
+    margin: 5px 0;
+    font-size: 12px;
+}
+
+.igc-no-errors {
+    color: #27ae60;
+    font-weight: 500;
+    display: block;
+    margin-top: 5px;
+}
+
+.igc-close-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.igc-close-btn:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+/* Prevent interference with page styles */
+.igc-highlighted {
+    /* Keep original styles but allow highlighting */
+}
