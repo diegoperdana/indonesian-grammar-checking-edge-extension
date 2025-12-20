@@ -1,6 +1,6 @@
 # Pemeriksa Tata Bahasa Indonesia - Microsoft Edge Extension
 
-Ekstensi Microsoft Edge untuk membantu pengguna Indonesia memperbaiki tata bahasa dalam dokumen online.
+Ekstensi Microsoft Edge untuk membantu pengguna Indonesia memperbaiki tata bahasa dalam dokumen online. Extensi ini dibuat dengan bantuan AI tools Cursor AI dan Preplexity.
 
 ## Fitur
 
