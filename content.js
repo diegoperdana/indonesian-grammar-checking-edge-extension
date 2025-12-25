@@ -11,6 +11,8 @@
     let highlightedElements = [];
     let errorMarkers = [];
     let summaryDismissed = false; // Track if user dismissed the summary
+    let summaryShown = false; // Track if summary has been shown for current scan session
+    let isScanning = false; // Track if scan is in progress
 
     // Initialize grammar checker
     function initGrammarChecker() {
@@ -27,7 +29,8 @@
         chrome.storage.sync.get(['grammarCheckerEnabled'], (result) => {
             isActive = result.grammarCheckerEnabled !== false; // Default to enabled
             if (isActive) {
-                startScanning();
+                // Initial scan - treat as manual scan so popup can appear once
+                startScanning(true, true);
             }
         });
 
@@ -36,22 +39,22 @@
             if (request.action === 'toggle') {
                 isActive = request.enabled;
                 if (isActive) {
-                    // Reset dismissed state when toggling on
-                    startScanning(true);
+                    // Reset dismissed state when toggling on - treat as manual scan
+                    startScanning(true, true);
                 } else {
                     stopScanning();
                 }
                 sendResponse({ success: true });
             } else if (request.action === 'scan') {
                 // Manual scan - reset dismissed state
-                startScanning(true);
+                startScanning(true, true);
                 sendResponse({ success: true });
             }
         });
     }
 
     // Start scanning the page
-    function startScanning(resetDismissed = true) {
+    function startScanning(resetDismissed = true, isManualScan = true) {
         if (!grammarChecker) {
             if (!initGrammarChecker()) {
                 console.error('Cannot start scanning: Grammar checker not available');
@@ -59,12 +62,19 @@
             }
         }
 
+        // Prevent multiple simultaneous scans
+        if (isScanning) {
+            return;
+        }
+
         try {
+            isScanning = true;
             stopScanning(); // Clear previous scans
             
             // Only reset dismissal state if explicitly requested (manual scan)
             if (resetDismissed) {
                 summaryDismissed = false;
+                summaryShown = false;
             }
             
             // Find all text elements
@@ -74,10 +84,19 @@
                 scanElement(element);
             });
 
-            // Always show summary after scan completes (if not dismissed)
-            showSummary();
+            // Only show summary for manual scans, NEVER for auto-scans from MutationObserver
+            // This ensures popup only appears when user explicitly requests a scan
+            // Once dismissed, popup will never show again for auto-scans
+            if (isManualScan && !summaryDismissed && !summaryShown) {
+                showSummary();
+            }
+            // For auto-scans (isManualScan = false), never show popup, even if flags are reset
+            // This prevents popup from appearing during automatic re-scans
+            
+            isScanning = false;
         } catch (error) {
             console.error('Error during scanning:', error);
+            isScanning = false;
         }
     }
 
@@ -104,11 +123,15 @@
         // Remove summary
         const summary = document.getElementById('igc-summary');
         if (summary) {
+            // Clear auto-hide timeout if exists
+            if (summary.autoHideTimeout) {
+                clearTimeout(summary.autoHideTimeout);
+            }
             summary.remove();
         }
         
-        // Reset dismissal state when stopping scan
-        summaryDismissed = false;
+        // Don't reset dismissal state here - preserve it so popup won't show again
+        // after user closes it, even for auto-scans
     }
 
     // Find all elements containing text
@@ -249,10 +272,13 @@
 
     // Show summary of errors found
     function showSummary() {
-        // Don't show if user already dismissed it
-        if (summaryDismissed) {
+        // Don't show if user already dismissed it or if already shown
+        if (summaryDismissed || summaryShown) {
             return;
         }
+
+        // Mark as shown immediately to prevent multiple calls
+        summaryShown = true;
 
         // Remove existing summary if any
         const existingSummary = document.getElementById('igc-summary');
@@ -291,18 +317,31 @@
 
         document.body.appendChild(summary);
 
-        // Close button - mark as dismissed
-        summary.querySelector('#igc-close-summary').addEventListener('click', () => {
+        // Function to close and dismiss summary
+        const closeSummary = () => {
             summaryDismissed = true;
+            summaryShown = true; // Also mark as shown to prevent re-showing
             summary.style.opacity = '0';
             setTimeout(() => {
                 if (summary.parentNode) {
                     summary.remove();
                 }
             }, 300);
+        };
+
+        // Close button - mark as dismissed
+        summary.querySelector('#igc-close-summary').addEventListener('click', () => {
+            // Clear auto-hide timeout if user closes manually
+            if (summary.autoHideTimeout) {
+                clearTimeout(summary.autoHideTimeout);
+            }
+            closeSummary();
         });
 
-        // No auto-hide - user must click X to dismiss
+        // Auto-hide after 10 seconds
+        summary.autoHideTimeout = setTimeout(() => {
+            closeSummary();
+        }, 30000); // 30 seconds
     }
 
     // Escape HTML
@@ -358,12 +397,13 @@
         }
 
         const observer = new MutationObserver(() => {
-            if (isActive) {
+            if (isActive && !isScanning) {
                 // Debounce scanning
                 clearTimeout(window.igcScanTimeout);
                 window.igcScanTimeout = setTimeout(() => {
-                    // Don't reset dismissed state for auto-scans from MutationObserver
-                    startScanning(false);
+                    // Auto-scan from MutationObserver - don't show popup
+                    // Pass false for both resetDismissed and isManualScan
+                    startScanning(false, false);
                 }, 1000);
             }
         });
