@@ -5,7 +5,8 @@
   "description": "Ekstensi untuk membantu pengguna Indonesia memperbaiki tata bahasa dalam dokumen online",
   "permissions": [
     "activeTab",
-    "storage"
+    "storage",
+    "scripting"
   ],
   "host_permissions": [
     "<all_urls>"

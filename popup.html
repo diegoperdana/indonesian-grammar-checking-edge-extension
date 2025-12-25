@@ -16,6 +16,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
+            margin: 0;
+            padding: 0;
         }
 
         .container {
@@ -160,6 +162,236 @@
             display: block;
             margin-bottom: 5px;
         }
+
+        /* Report Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 2% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 95%;
+            max-width: 900px;
+            max-height: 96vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .close-modal {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .report-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .summary-card.error {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .summary-card.warning {
+            border-left-color: #ffc107;
+            background: #fffbf0;
+        }
+
+        .summary-card.success {
+            border-left-color: #28a745;
+            background: #f0fff4;
+        }
+
+        .summary-card .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .summary-card.error .number {
+            color: #dc3545;
+        }
+
+        .summary-card.warning .number {
+            color: #ffc107;
+        }
+
+        .summary-card.success .number {
+            color: #28a745;
+        }
+
+        .summary-card .label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .error-list {
+            margin-top: 20px;
+        }
+
+        .error-section {
+            margin-bottom: 30px;
+        }
+
+        .error-section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .error-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: box-shadow 0.3s;
+        }
+
+        .error-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .error-item.error {
+            border-left: 4px solid #dc3545;
+        }
+
+        .error-item.warning {
+            border-left: 4px solid #ffc107;
+        }
+
+        .error-text {
+            font-weight: bold;
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .error-item.warning .error-message {
+            color: #856404;
+        }
+
+        .error-rule {
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+
+        .error-explanation {
+            font-size: 13px;
+            color: #555;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .error-context {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .error-suggestion {
+            background: #e7f3ff;
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #004085;
+        }
+
+        .error-suggestion strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .no-errors {
+            text-align: center;
+            padding: 40px;
+            color: #28a745;
+            font-size: 18px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -180,6 +412,7 @@
 
             <button class="btn" id="scanBtn">Pindai Halaman</button>
             <button class="btn btn-secondary" id="clearBtn">Hapus Highlight</button>
+            <button class="btn" id="reportBtn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">📊 Tampilkan Laporan</button>
         </div>
 
         <div class="status" id="status">
@@ -189,6 +422,19 @@
         <div class="info">
             <strong>💡 Tips:</strong>
             Ekstensi ini akan memindai teks di halaman web dan menandai kesalahan tata bahasa. Klik pada teks yang ditandai untuk melihat detail kesalahan.
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📊 Laporan Lengkap Kesalahan Tata Bahasa</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <div class="loading">Memuat laporan...</div>
+            </div>
         </div>
     </div>
 

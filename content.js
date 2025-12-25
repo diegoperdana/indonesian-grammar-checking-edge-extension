@@ -45,11 +45,24 @@
                     stopScanning();
                 }
                 sendResponse({ success: true });
+                return true; // Indicates we will send a response asynchronously
             } else if (request.action === 'scan') {
                 // Manual scan - reset dismissed state
                 startScanning(true, true);
                 sendResponse({ success: true });
+                return true;
+            } else if (request.action === 'getReport') {
+                // Get full report of all errors
+                try {
+                    const report = getFullReport();
+                    sendResponse({ success: true, report: report });
+                } catch (error) {
+                    console.error('Error getting report:', error);
+                    sendResponse({ success: false, error: error.message });
+                }
+                return true; // Important: return true to indicate async response
             }
+            return false; // Indicates we won't send a response
         });
     }
 
@@ -342,6 +355,91 @@
         summary.autoHideTimeout = setTimeout(() => {
             closeSummary();
         }, 30000); // 30 seconds
+    }
+
+    // Get full report of all errors
+    function getFullReport() {
+        const report = {
+            totalErrors: 0,
+            errorCount: 0,
+            warningCount: 0,
+            errors: [],
+            warnings: [],
+            byCategory: {}
+        };
+
+        // Ensure highlightedElements exists and is an array
+        if (!highlightedElements || !Array.isArray(highlightedElements)) {
+            return report;
+        }
+
+        highlightedElements.forEach((item, elementIndex) => {
+            if (!item.errors || item.errors.length === 0) {
+                return;
+            }
+
+            // Get element context (try to get parent element info)
+            let elementContext = '';
+            try {
+                if (item.element) {
+                    const tagName = item.element.tagName?.toLowerCase() || 'unknown';
+                    const parent = item.element.parentElement;
+                    const parentTag = parent?.tagName?.toLowerCase() || '';
+                    elementContext = `${tagName}${parentTag ? ` dalam ${parentTag}` : ''}`;
+                }
+            } catch (e) {
+                elementContext = 'element';
+            }
+
+            item.errors.forEach(error => {
+                const errorText = item.originalText.substring(error.index, error.index + error.length);
+                const contextBefore = item.originalText.substring(Math.max(0, error.index - 30), error.index);
+                const contextAfter = item.originalText.substring(error.index + error.length, Math.min(item.originalText.length, error.index + error.length + 30));
+
+                const errorData = {
+                    text: errorText,
+                    message: error.message,
+                    severity: error.severity,
+                    category: error.category || 'umum',
+                    rule: error.rule || 'Aturan umum',
+                    explanation: error.explanation || '',
+                    suggestion: error.suggestion || '',
+                    context: {
+                        before: contextBefore.trim(),
+                        after: contextAfter.trim(),
+                        fullText: item.originalText.substring(0, 200) + (item.originalText.length > 200 ? '...' : '')
+                    },
+                    elementContext: elementContext,
+                    position: error.index
+                };
+
+                if (error.severity === 'error') {
+                    report.errors.push(errorData);
+                    report.errorCount++;
+                } else {
+                    report.warnings.push(errorData);
+                    report.warningCount++;
+                }
+
+                report.totalErrors++;
+
+                // Group by category
+                const category = error.category || 'umum';
+                if (!report.byCategory[category]) {
+                    report.byCategory[category] = {
+                        errors: [],
+                        warnings: []
+                    };
+                }
+                if (error.severity === 'error') {
+                    report.byCategory[category].errors.push(errorData);
+                } else {
+                    report.byCategory[category].warnings.push(errorData);
+                }
+            });
+        });
+
+        return report;
     }
 
     // Escape HTML
